@@ -39,4 +39,37 @@
  */
 export function diwaliLightsPlan(lightStrings, budget) {
   // Your code here
+  const result = { selected: [], totalLength: 0, totalCost: 0 };
+
+  if (
+    !Array.isArray(lightStrings) ||
+    typeof budget !== "number" ||
+    budget <= 0
+  ) {
+    return result;
+  }
+
+  const colorRates = {
+    golden: 50,
+    multicolor: 40,
+    white: 30,
+  };
+
+  for (const light of lightStrings) {
+    const { color, length } = light;
+    const rate = colorRates[color] || 35;
+    const cost = rate * length;
+
+    result.selected.push({ color, length, cost });
+    result.totalLength += length;
+    result.totalCost += cost;
+  }
+
+  while (result.totalCost > budget && result.selected.length > 0) {
+    const lastItem = result.selected.pop();
+    result.totalLength -= lastItem.length;
+    result.totalCost -= lastItem.cost;
+  }
+
+  return result;
 }
